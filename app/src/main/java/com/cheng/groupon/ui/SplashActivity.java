@@ -15,7 +15,7 @@ import com.cheng.groupon.util.SPUtils;
 public class SplashActivity extends Activity {
 
     SPUtils spUtils;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
