@@ -5,7 +5,7 @@
     android:id="@+id/tv_fragment_skip"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/shape_btn_next"
+    android:background="@drawable/shape_btn_round"
     android:drawableRight="@drawable/detail_icon_arrow"
     android:gravity="center"
     android:paddingTop="8dip"

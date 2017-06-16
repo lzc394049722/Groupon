@@ -3,4 +3,27 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home_food">美食</string>
+    <string name="home_movie">电影/演出</string>
+    <string name="home_hotel">酒店</string>
+    <string name="home_relax">休闲娱乐</string>
+    <string name="home_takeaway">外卖</string>
+    <string name="home_pub">自助餐</string>
+    <string name="home_liren">丽人/美发</string>
+    <string name="home_zhoubianyou">周边游</string>
+    <string name="home_meifa">美发</string>
+    <string name="home_shopping">购物</string>
+    <string name="home_sport">健身</string>
+    <string name="home_footer">足疗</string>
+    <string name="home_zongheshangchang">综合商场</string>
+    <string name="home_SPA">美容SPA</string>
+    <string name="home_baby">亲子</string>
+    <string name="home_marry">结婚/摄影</string>
+    <string name="home_health">医疗/健康</string>
+    <string name="home_jipiao">机票</string>
+    <string name="home_trip">旅行</string>
+    <string name="home_learn">学习培训</string>
+    <string name="home_pet">宠物</string>
+    <string name="home_jiazhuang">家装</string>
+    <string name="home_more">全部分类</string>
 </resources>
