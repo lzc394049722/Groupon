@@ -1,34 +1,32 @@
 package com.cheng.groupon.ui;
 
+import android.animation.Animator;
 import android.app.Activity;
-import android.content.res.ColorStateList;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.os.Handler;
-import android.support.annotation.IdRes;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
+import android.view.animation.AccelerateInterpolator;
 import android.widget.AbsListView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.cheng.groupon.R;
+import com.cheng.groupon.adapter.RflvAdapter;
+import com.cheng.groupon.domain.TuanBean;
+import com.cheng.groupon.util.HttpUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
-import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +34,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends Activity {
 
@@ -64,8 +65,9 @@ public class MainActivity extends Activity {
 
 
     ListView listView;
-    List<String> datas;
-    ArrayAdapter<String> adapter;
+    List<TuanBean.Deal> datas;
+    RflvAdapter adapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,25 +104,10 @@ public class MainActivity extends Activity {
 
 
     private void initListView() {
-
         listView = ptrlListView.getRefreshableView();
         datas = new ArrayList<>();
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, datas);
+        adapter = new RflvAdapter(this, datas);
         listView.setAdapter(adapter);
-        ptrlListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
-            @Override
-            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        datas.add(0, "13");
-                        adapter.notifyDataSetChanged();
-                        ptrlListView.onRefreshComplete();
-                    }
-                }, 1500);
-            }
-        });
-
         LayoutInflater inflater = LayoutInflater.from(this);
         View headViewPager = inflater.inflate(R.layout.head_root_view, listView, false);
         View headerListSquare = inflater.inflate(R.layout.header_list_square, listView, false);
@@ -133,8 +120,14 @@ public class MainActivity extends Activity {
         listView.addHeaderView(headerListCategories);
         listView.addHeaderView(headerListRecommend);
 
-        initViewPager(headViewPager);
 
+        initViewPager(headViewPager);
+        ptrlListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
+            @Override
+            public void onRefresh(PullToRefreshBase<ListView> refreshView) {
+                refresh();
+            }
+        });
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -143,13 +136,20 @@ public class MainActivity extends Activity {
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-               // Log.i("TAG:", "第一个参数：" + firstVisibleItem);
-                if(firstVisibleItem==0){
+                // Log.i("TAG:", "第一个参数：" + firstVisibleItem);
+                if (firstVisibleItem == 0) {
                     cityContainer.setVisibility(View.VISIBLE);
                     ivAdd.setVisibility(View.VISIBLE);
-                }else {
-                    cityContainer.setVisibility(View.GONE);
-                    ivAdd.setVisibility(View.GONE);
+                } else {
+                    if (ivAdd.getVisibility() != View.GONE) {
+                        Animator animator = ViewAnimationUtils.createCircularReveal(layoutSearch, layoutSearch.getWidth() / 2,
+                                layoutSearch.getHeight() / 2, 0, (float) Math.hypot(layoutSearch.getWidth(), layoutSearch.getHeight()));
+                        animator.setDuration(200L);
+                        animator.setInterpolator(new AccelerateInterpolator());
+                        animator.start();
+                        cityContainer.setVisibility(View.GONE);
+                        ivAdd.setVisibility(View.GONE);
+                    }
                 }
             }
         });
@@ -229,10 +229,29 @@ public class MainActivity extends Activity {
     }
 
     private void refresh() {
-        datas.add("aa");
-        datas.add("aa");
-        datas.add("abn");
-        adapter.notifyDataSetChanged();
+
+        //  HttpUtil.testHttpUrlConnection();
+        // HttpUtil.testVolley();
+        // HttpUtil.testRetrofit();
+        HttpUtil.getDailyNewIdList(tvCity.getText().toString(), new Callback<TuanBean>() {
+            @Override
+            public void onResponse(Call<TuanBean> call, Response<TuanBean> response) {
+                if (response != null) {
+                    List<TuanBean.Deal> deals = response.body().getDeals();
+                    adapter.addAll(deals, true);
+
+                } else
+                    //今日无新增团购内容
+                    Toast.makeText(MainActivity.this, "今日无新增团购内容", Toast.LENGTH_SHORT).show();
+                ptrlListView.onRefreshComplete();
+            }
+
+            @Override
+            public void onFailure(Call<TuanBean> call, Throwable t) {
+                ptrlListView.onRefreshComplete();
+            }
+        });
+
     }
 
     @OnClick(R.id.ll_header_left_container)

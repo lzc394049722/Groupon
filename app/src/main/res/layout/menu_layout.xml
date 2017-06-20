@@ -4,7 +4,7 @@
     android:layout_height="180dp"
     android:orientation="vertical"
     android:padding="8dp"
-    android:background="@drawable/mid_filter_bg_9">
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
