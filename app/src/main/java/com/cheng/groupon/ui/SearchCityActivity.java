@@ -60,11 +60,13 @@ public class SearchCityActivity extends Activity {
             cities.clear();
             adapter.notifyDataSetChanged();
         } else {
+            //必须转成大写
             searchCities(editable.toString().toUpperCase());
         }
     }
 
     private void searchCities(String s) {
+
         ArrayList<String> temp = new ArrayList<>();
         //中文
         if (s.matches("[\\u4e00-\\u9fff]+")) {
