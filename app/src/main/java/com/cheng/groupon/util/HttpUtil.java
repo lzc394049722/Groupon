@@ -1,20 +1,12 @@
 package com.cheng.groupon.util;
 
-import android.app.ProgressDialog;
 import android.util.Log;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.cheng.groupon.C;
 import com.cheng.groupon.R;
 import com.cheng.groupon.app.MyApp;
-import com.cheng.groupon.domain.BatchDeals;
+import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
 import com.squareup.picasso.Picasso;
@@ -39,8 +31,6 @@ import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
  * Created by Administrator on 2017/6/19 0019.
@@ -199,7 +189,7 @@ public class HttpUtil {
     private static void getGroupOnBatchDeals(List<String> id_list, Callback<TuanBean> callback) {
 
         String idList = getIdListStr(id_list);
-        if (idList.length() > 0)
+        if (idList != null && idList.length() > 0)
             RetrofitClient.getInstance().getGroupOnBatchDeals(idList, callback);
         else
             callback.onResponse(null, null);
@@ -208,6 +198,7 @@ public class HttpUtil {
     private static String getIdListStr(List<String> id_list) {
 
         int size = id_list.size();
+        if (size == 0) return null;
         if (size > 40) size = 40;
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < size; i++) {
@@ -227,6 +218,10 @@ public class HttpUtil {
                 .placeholder(R.drawable.wedding_photo_default)
                 .error(R.drawable.wedding_photo_error)
                 .into(iv);
+    }
+
+    public static void getAllCities(Callback<City> callback) {
+        RetrofitClient.getInstance().getAllCities(callback);
     }
 
 }

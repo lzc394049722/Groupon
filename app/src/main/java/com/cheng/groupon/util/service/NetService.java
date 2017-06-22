@@ -1,5 +1,6 @@
 package com.cheng.groupon.util.service;
 
+import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
 
@@ -24,4 +25,7 @@ public interface NetService {
 
     @GET("deal/get_batch_deals_by_id")
     Call<TuanBean> getGroupOnBatchDeals(@Query("deal_ids") String deal_ids);
+
+    @GET("metadata/get_cities_with_businesses")
+    Call<City> getCitys();
 }

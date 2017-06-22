@@ -3,6 +3,7 @@ package com.cheng.groupon.util;
 import android.util.Log;
 
 import com.cheng.groupon.C;
+import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
 
@@ -112,11 +113,13 @@ public class RetrofitClient {
 
             Map<String, String> params = new HashMap<>();
 
+
             Set<String> set = url.queryParameterNames();
 
             for (String key : set) {
                 params.put(key, url.queryParameter(key));
             }
+
 
             String sign = HttpUtil.getSign(C.APP_KEY, C.APP_SECRET, params);
             //字符串形式的http://baseurl/deal/get_daily_new_id_list?city=xxx&date=xxx
@@ -124,12 +127,24 @@ public class RetrofitClient {
             Log.d("TAG", "原始请求路径------> " + urlString);
 
             StringBuilder sb = new StringBuilder(urlString);
-            sb.append("&").append("appkey=").append(C.APP_KEY);
+            if (set.size() == 0) {
+                sb.append("?");
+            } else {
+                sb.append("&");
+            }
+            sb.append("appkey=").append(C.APP_KEY);
             sb.append("&").append("sign=").append(sign);
+            Log.d("TAG", "新的请求路径------> " + sb.toString());
             Request build = new Request.Builder().url(sb.toString()).build();
             return chain.proceed(build);
         }
     }
 
+
+    public void getAllCities(Callback<City> callback) {
+
+        Call<City> call = netService.getCitys();
+        call.enqueue(callback);
+    }
 
 }

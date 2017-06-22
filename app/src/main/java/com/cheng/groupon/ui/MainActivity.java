@@ -2,10 +2,13 @@ package com.cheng.groupon.ui;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +27,7 @@ import android.widget.Toast;
 import com.cheng.groupon.R;
 import com.cheng.groupon.adapter.RflvAdapter;
 import com.cheng.groupon.domain.TuanBean;
+import com.cheng.groupon.util.CommonUtils;
 import com.cheng.groupon.util.HttpUtil;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
@@ -233,30 +237,35 @@ public class MainActivity extends Activity {
         //  HttpUtil.testHttpUrlConnection();
         // HttpUtil.testVolley();
         // HttpUtil.testRetrofit();
-        HttpUtil.getDailyNewIdList(tvCity.getText().toString(), new Callback<TuanBean>() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onResponse(Call<TuanBean> call, Response<TuanBean> response) {
-                if (response != null) {
-                    List<TuanBean.Deal> deals = response.body().getDeals();
-                    adapter.addAll(deals, true);
+            public void run() {
+                HttpUtil.getDailyNewIdList(tvCity.getText().toString(), new Callback<TuanBean>() {
+                    @Override
+                    public void onResponse(Call<TuanBean> call, Response<TuanBean> response) {
+                        if (response != null) {
+                            List<TuanBean.Deal> deals = response.body().getDeals();
+                            adapter.addAll(deals, true);
 
-                } else
-                    //今日无新增团购内容
-                    Toast.makeText(MainActivity.this, "今日无新增团购内容", Toast.LENGTH_SHORT).show();
-                ptrlListView.onRefreshComplete();
-            }
+                        } else
+                            //今日无新增团购内容
+                            Toast.makeText(MainActivity.this, "今日无新增团购内容", Toast.LENGTH_SHORT).show();
+                        ptrlListView.onRefreshComplete();
+                    }
 
-            @Override
-            public void onFailure(Call<TuanBean> call, Throwable t) {
-                ptrlListView.onRefreshComplete();
+                    @Override
+                    public void onFailure(Call<TuanBean> call, Throwable t) {
+                        ptrlListView.onRefreshComplete();
+                    }
+                });
             }
-        });
+        }, 1000);
 
     }
 
     @OnClick(R.id.ll_header_left_container)
     void jumpToCity() {
-        // TODO: 2017/6/16 0016
+        startActivityForResult(new Intent(this, CityActivity.class), 101);
     }
 
     @OnClick(R.id.iv_main_add)
@@ -267,5 +276,18 @@ public class MainActivity extends Activity {
         } else {
             layoutMenu.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 101 && resultCode == 1) {
+            String city = data.getStringExtra("city");
+            if (!TextUtils.isEmpty(city)) {
+                tvCity.setText(city);
+                refresh();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }
