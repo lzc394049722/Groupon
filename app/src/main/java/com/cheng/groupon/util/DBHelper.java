@@ -18,15 +18,34 @@ import java.sql.SQLException;
 
 public class DBHelper extends OrmLiteSqliteOpenHelper {
 
+    private static DBHelper INSTANCE;
 
-    public DBHelper(Context context) {
-        super(context, "city.db", null, 1);
+    public static DBHelper getInstance(Context context) {
+
+        if (INSTANCE == null) {
+            synchronized (DBHelper.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new DBHelper(context);
+
+                }
+            }
+
+        }
+        return INSTANCE;
+
+    }
+
+
+    private DBHelper(Context context) {
+        super(context, "city.db", null, 2);
     }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource) {
+        //在第一次创建city.db数据库时，该方法会被调用
+        //创建存储数据的数据表
         try {
-            TableUtils.clearTable(connectionSource, CitynameBean.class);
+            TableUtils.createTableIfNotExists(connectionSource, CitynameBean.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -35,10 +54,11 @@ public class DBHelper extends OrmLiteSqliteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, ConnectionSource connectionSource, int i, int i1) {
         try {
-            TableUtils.dropTable(connectionSource, CitynameBean.class, false);
+            TableUtils.dropTable(connectionSource, CitynameBean.class, true);
+            onCreate(sqLiteDatabase, connectionSource);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        onCreate(sqLiteDatabase, connectionSource);
+
     }
 }

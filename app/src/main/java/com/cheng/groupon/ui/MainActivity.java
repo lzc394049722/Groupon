@@ -2,6 +2,7 @@ package com.cheng.groupon.ui;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
@@ -9,6 +10,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.transition.Explode;
+import android.transition.Slide;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -111,7 +114,7 @@ public class MainActivity extends Activity {
         listView = ptrlListView.getRefreshableView();
         datas = new ArrayList<>();
         adapter = new RflvAdapter(this, datas);
-        listView.setAdapter(adapter);
+
         LayoutInflater inflater = LayoutInflater.from(this);
         View headViewPager = inflater.inflate(R.layout.head_root_view, listView, false);
         View headerListSquare = inflater.inflate(R.layout.header_list_square, listView, false);
@@ -123,7 +126,7 @@ public class MainActivity extends Activity {
         listView.addHeaderView(headerListAds);
         listView.addHeaderView(headerListCategories);
         listView.addHeaderView(headerListRecommend);
-
+        listView.setAdapter(adapter);
 
         initViewPager(headViewPager);
         ptrlListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener<ListView>() {
@@ -181,6 +184,17 @@ public class MainActivity extends Activity {
             @Override
             public Object instantiateItem(ViewGroup container, int position) {
                 View view = LayoutInflater.from(MainActivity.this).inflate(res[position % 3], container, false);
+                if (position % 3 == 0) {
+                    View viewById = view.findViewById(R.id.ll_main_food_view);
+                    viewById.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(MainActivity.this, BusinessActivity.class);
+                            intent.putExtra("city", tvCity.getText().toString());
+                            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                        }
+                    });
+                }
                 container.addView(view);
                 return view;
             }

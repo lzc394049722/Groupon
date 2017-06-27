@@ -16,24 +16,12 @@ import java.util.concurrent.Callable;
 
 public class DBUtil {
 
-    private Dao<CitynameBean, String> dao;
-    private DBHelper helper;
-
-    private static DBUtil instance = null;
-
-    public static DBUtil getInstance(Context context) {
-        if (instance == null) {
-            synchronized (DBUtil.class) {
-                if (instance == null)
-                    instance = new DBUtil(context);
-            }
-        }
-        return instance;
-    }
+    Dao<CitynameBean, String> dao;
+    DBHelper helper;
 
 
-    private DBUtil(Context context) {
-        helper = new DBHelper(context);
+    public DBUtil(Context context) {
+        helper = DBHelper.getInstance(context);
         try {
             dao = helper.getDao(CitynameBean.class);
         } catch (SQLException e) {
@@ -78,12 +66,12 @@ public class DBUtil {
     }
 
     public List<CitynameBean> getAllCityName() {
-        List<CitynameBean> all = null;
         try {
-            all = dao.queryForAll();
+            return dao.queryForAll();
         } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("查询数据库时出现异常");
         }
-        return all;
+
     }
 }

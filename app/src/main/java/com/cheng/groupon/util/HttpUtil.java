@@ -1,11 +1,16 @@
 package com.cheng.groupon.util;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.cheng.groupon.C;
 import com.cheng.groupon.R;
 import com.cheng.groupon.app.MyApp;
+import com.cheng.groupon.domain.Business.ResponseBusiness;
+import com.cheng.groupon.domain.BusinessRegion.ResponseBusinessRegion;
 import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
@@ -13,6 +18,8 @@ import com.squareup.picasso.Picasso;
 
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -222,6 +229,49 @@ public class HttpUtil {
 
     public static void getAllCities(Callback<City> callback) {
         RetrofitClient.getInstance().getAllCities(callback);
+    }
+
+    public static void getBusiness(String city, String region, Callback<ResponseBusiness> callback) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("city", city);
+        params.put("category", "美食");
+        if (!TextUtils.isEmpty(region)) {
+            params.put("region", region);
+        }
+        RetrofitClient.getInstance().getBusiness(params, callback);
+    }
+
+    public static void getDistricts(String city, Callback<ResponseBusinessRegion> callback) {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("city", city);
+        RetrofitClient.getInstance().getDistricts(params, callback);
+    }
+
+    public static void getComment(final String url, final OnResponseListener<Document> listener) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final Document document = Jsoup.connect(url).get();
+                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                        @Override
+                        public void run() {
+                            listener.onResponse(document);
+                        }
+                    });
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+
+    }
+
+    public interface OnResponseListener<T> {
+        void onResponse(T t);
     }
 
 }

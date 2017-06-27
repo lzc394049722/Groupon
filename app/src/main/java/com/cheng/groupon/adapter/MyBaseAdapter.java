@@ -19,7 +19,7 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
     protected LayoutInflater inflater;
     protected Context mContext;
 
-    public MyBaseAdapter(Context mContext,List<T> datas) {
+    public MyBaseAdapter(Context mContext, List<T> datas) {
         this.mContext = mContext;
         inflater = LayoutInflater.from(mContext);
         this.mDatas = datas;
@@ -51,6 +51,12 @@ public abstract class MyBaseAdapter<T> extends BaseAdapter {
         mDatas.addAll(datas);
         notifyDataSetChanged();
     }
+
+    public void removeAll() {
+        mDatas.clear();
+        notifyDataSetChanged();
+    }
+
 
     @Override
     public abstract View getView(int position, View convertView, ViewGroup parent);

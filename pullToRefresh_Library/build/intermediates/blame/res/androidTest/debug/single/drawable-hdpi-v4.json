@@ -56,12 +56,12 @@
         "source": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\dropdown_anim_05.png"
     },
     {
-        "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\default_ptr_rotate.png",
-        "source": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\default_ptr_rotate.png"
-    },
-    {
         "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\dropdown_anim_01.png",
         "source": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\dropdown_anim_01.png"
+    },
+    {
+        "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\default_ptr_rotate.png",
+        "source": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\bundles\\debug\\res\\drawable-hdpi-v4\\default_ptr_rotate.png"
     },
     {
         "merged": "C:\\Users\\Administrator\\AndroidStudioProjects\\Groupon\\pullToRefresh_Library\\build\\intermediates\\res\\merged\\androidTest\\debug\\drawable-hdpi-v4\\dropdown_anim_03.png",

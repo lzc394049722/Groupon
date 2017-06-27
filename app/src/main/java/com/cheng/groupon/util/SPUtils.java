@@ -38,4 +38,15 @@ public class SPUtils {
         editor.putBoolean(C.FIRST_IN, flag);
         editor.commit();
     }
+
+    public boolean isCloseBanner() {
+        return sp.getBoolean(C.ISAD_CLOSE, false);
+    }
+
+    public void setCloseBanner(boolean flag) {
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putBoolean(C.ISAD_CLOSE, flag);
+        editor.commit();
+    }
+
 }

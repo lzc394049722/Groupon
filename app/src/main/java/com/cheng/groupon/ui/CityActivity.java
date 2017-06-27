@@ -16,9 +16,11 @@ import com.cheng.groupon.adapter.CityAdapter;
 import com.cheng.groupon.app.MyApp;
 import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.city.CitynameBean;
+import com.cheng.groupon.util.CommonUtils;
 import com.cheng.groupon.util.DBUtil;
 import com.cheng.groupon.util.HttpUtil;
 import com.cheng.groupon.util.PinYinUtil;
+import com.cheng.groupon.view.MyLetterView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,14 +43,42 @@ public class CityActivity extends Activity {
     DBUtil dbUtil;
     @BindView(R.id.ll_city_search)
     LinearLayout layoutSearch;
+    @BindView(R.id.mlv_city)
+    MyLetterView myLetterView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city);
+        dbUtil = new DBUtil(this);
         ButterKnife.bind(this);
-        dbUtil = DBUtil.getInstance(this);
+        layoutSearch.setVisibility(View.VISIBLE);
         initRecyclerView();
+        initMyLetterView();
+    }
+
+    private void initMyLetterView() {
+        myLetterView.setOnTouchLetterListener(new MyLetterView.OnTouchLetterListener() {
+            @Override
+            public void onTouchLetter(String letter) {
+                LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
+                if ("热门".equals(letter)) {
+                    manager.scrollToPosition(0);
+                } else {
+                    int position = adapter.getPositionForSection(letter.charAt(0));
+                    if (adapter.getHeaderView() != null) {
+                        position += 1;
+                    }
+                    //RecyclerView移动到第position个视图位置
+                    //且该视图位于当前RecyclerView最顶端
+                    //当移动完毕后，如何设置offset值(非0)，则偏移offset个像素
+                    //如果大于0就往下偏移，如果小于0就往上偏移
+                    manager.scrollToPositionWithOffset(position, 0);
+                }
+
+            }
+        });
     }
 
     private void initRecyclerView() {
@@ -79,7 +109,7 @@ public class CityActivity extends Activity {
 
     private void refresh() {
         //缓存中有数据
-        if (MyApp.cities != null) {
+        if (MyApp.cities != null && MyApp.cities.size() > 0) {
             adapter.addAll(true, MyApp.cities);
             return;
         }
@@ -87,6 +117,7 @@ public class CityActivity extends Activity {
         List<CitynameBean> allCityName = dbUtil.getAllCityName();
         if (allCityName != null && allCityName.size() > 0) {
             adapter.addAll(true, allCityName);
+            MyApp.cities = allCityName;
             return;
         }
 

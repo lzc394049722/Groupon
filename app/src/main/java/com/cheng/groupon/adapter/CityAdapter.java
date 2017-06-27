@@ -79,6 +79,10 @@ public class CityAdapter extends RecyclerView.Adapter<CityAdapter.ViewHolder> im
         });
     }
 
+    public View getHeaderView() {
+        return headView;
+    }
+
     private int getDataIndex(int position) {
         return headView == null ? position : position - 1;
     }

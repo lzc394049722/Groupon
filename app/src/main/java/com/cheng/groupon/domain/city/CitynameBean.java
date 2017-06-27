@@ -9,6 +9,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable
 public class CitynameBean {
+
     @DatabaseField(id = true)
     String cityName;//城市的中文名称
     @DatabaseField

@@ -7,10 +7,24 @@
     android:orientation="vertical"
     tools:context="com.cheng.groupon.ui.CityActivity">
 
-    <include layout="@layout/include_titlebar"/>
+    <include layout="@layout/include_titlebar" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_city_list"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_city_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.cheng.groupon.view.MyLetterView
+            android:id="@+id/mlv_city"
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="right"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="4dp"
+            app:letter_color="#ff0000ff" />
+    </FrameLayout>
 </LinearLayout>

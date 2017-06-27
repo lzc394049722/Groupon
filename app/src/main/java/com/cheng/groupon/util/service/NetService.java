@@ -1,5 +1,7 @@
 package com.cheng.groupon.util.service;
 
+import com.cheng.groupon.domain.Business.ResponseBusiness;
+import com.cheng.groupon.domain.BusinessRegion.ResponseBusinessRegion;
 import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
@@ -28,4 +30,10 @@ public interface NetService {
 
     @GET("metadata/get_cities_with_businesses")
     Call<City> getCitys();
+
+    @GET("business/find_businesses")
+    Call<ResponseBusiness> getBusiness(@QueryMap Map<String, String> map);
+
+    @GET("metadata/get_regions_with_businesses")
+    Call<ResponseBusinessRegion> getDistricts(@QueryMap Map<String, String> params);
 }

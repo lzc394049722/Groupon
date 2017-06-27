@@ -3,6 +3,8 @@ package com.cheng.groupon.util;
 import android.util.Log;
 
 import com.cheng.groupon.C;
+import com.cheng.groupon.domain.Business.ResponseBusiness;
+import com.cheng.groupon.domain.BusinessRegion.ResponseBusinessRegion;
 import com.cheng.groupon.domain.city.City;
 import com.cheng.groupon.domain.DailyNewIdList;
 import com.cheng.groupon.domain.TuanBean;
@@ -144,6 +146,16 @@ public class RetrofitClient {
     public void getAllCities(Callback<City> callback) {
 
         Call<City> call = netService.getCitys();
+        call.enqueue(callback);
+    }
+
+    public void getBusiness(Map<String, String> map, Callback<ResponseBusiness> callback) {
+        Call<ResponseBusiness> call = netService.getBusiness(map);
+        call.enqueue(callback);
+    }
+
+    public void getDistricts(Map<String, String> map, Callback<ResponseBusinessRegion> callback) {
+        Call<ResponseBusinessRegion> call = netService.getDistricts(map);
         call.enqueue(callback);
     }
 

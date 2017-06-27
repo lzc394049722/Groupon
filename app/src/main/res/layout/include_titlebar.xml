@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/square_title_background">
+    android:background="@color/square_title_background"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -13,10 +13,10 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
             android:layout_centerVertical="true"
-           android:layout_marginLeft="16dp"
-            android:background="@drawable/ic_back_u" />
+            android:layout_marginLeft="16dp"
+            android:background="@drawable/ic_back_u"
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -28,42 +28,56 @@
             android:padding="2dp">
 
             <TextView
+                android:id="@+id/tv_title_bar_left"
                 android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/orange_drak"
+                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:layout_height="wrap_content"
-                android:background="@color/orange_drak"
                 android:text="全部"
                 android:textColor="@android:color/white"
                 android:textSize="14sp" />
+
             <TextView
+                android:id="@+id/tv_title_bar_right"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@android:color/white"
-                android:text="海外"
+                android:paddingBottom="8dp"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp"
+                android:text="海外"
                 android:textColor="@color/orange_drak"
                 android:textSize="14sp" />
 
         </LinearLayout>
 
+        <ImageView
+            android:id="@+id/iv_title_bar_search"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/navibar_icon_search"
+            android:scaleType="centerCrop"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_city_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:id="@+id/ll_city_search"
-        android:background="@drawable/shape_btn_round">
+        android:background="@drawable/shape_btn_round"
+        android:visibility="gone">
 
         <ImageView
             android:layout_width="wrap_content"

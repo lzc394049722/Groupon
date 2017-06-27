@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.transition.Explode;
+import android.widget.Toast;
+
+import com.cheng.groupon.app.MyApp;
 
 /**
  * Created by cheng on 2017/6/15 0015.
@@ -15,8 +18,9 @@ public class CommonUtils {
 
     /**
      * getWindow().setEnterTransition(new Explode());
-        getWindow().setEnterTransition(new Slide());
-        getWindow().setEnterTransition(new Fade());
+     * getWindow().setEnterTransition(new Slide());
+     * getWindow().setEnterTransition(new Fade());
+     *
      * @param activity
      * @param loadClass
      */
@@ -26,10 +30,11 @@ public class CommonUtils {
         Intent intent = new Intent(activity, loadClass);
 
         // activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        Explode explode = new Explode();
-        explode.setDuration(1000L);
-        activity.getWindow().setEnterTransition(explode);
         activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+    }
+
+    public static void toast(CharSequence text) {
+        Toast.makeText(MyApp.mContext, text, Toast.LENGTH_SHORT).show();
     }
 
 }

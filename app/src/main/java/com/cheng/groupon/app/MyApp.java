@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.cheng.groupon.domain.city.CitynameBean;
+import com.cheng.groupon.util.SPUtils;
 
 import java.util.List;
 
@@ -14,10 +15,13 @@ import java.util.List;
 public class MyApp extends Application {
 
     public static Context mContext;
-    public  static List<CitynameBean> cities;
+    public static List<CitynameBean> cities;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mContext = this;
+        SPUtils spUtil = new SPUtils(this);
+        spUtil.setCloseBanner(false);
     }
 }
