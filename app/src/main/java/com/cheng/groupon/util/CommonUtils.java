@@ -30,7 +30,11 @@ public class CommonUtils {
         Intent intent = new Intent(activity, loadClass);
 
         // activity.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-        activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            activity.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(activity).toBundle());
+        } else {
+            activity.startActivity(intent);
+        }
     }
 
     public static void toast(CharSequence text) {

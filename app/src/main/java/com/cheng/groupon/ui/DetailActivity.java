@@ -1,7 +1,9 @@
 package com.cheng.groupon.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.icu.text.LocaleDisplayNames;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.transition.Slide;
@@ -13,7 +15,9 @@ import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.android.volley.Response;
 import com.cheng.groupon.R;
+import com.cheng.groupon.adapter.CommentAdapter;
 import com.cheng.groupon.domain.Business.Businesses;
 import com.cheng.groupon.domain.Comment;
 import com.cheng.groupon.util.CommonUtils;
@@ -30,6 +34,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class DetailActivity extends Activity {
     @BindView(R.id.iv_business_item)
@@ -62,13 +67,16 @@ public class DetailActivity extends Activity {
             R.drawable.star45,
             R.drawable.star50};
 
-    List<String> datas;
+    List<Comment> datas;
+    CommentAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        getWindow().setEnterTransition(new Slide().setDuration(1500).setInterpolator(new AccelerateInterpolator()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(new Slide().setDuration(1500).setInterpolator(new AccelerateInterpolator()));
+        }
         businesses = (Businesses) getIntent().getSerializableExtra("business");
         Log.d("TAG", businesses.toString());
         ButterKnife.bind(this);
@@ -122,6 +130,14 @@ public class DetailActivity extends Activity {
         tvPhone.setText(businesses.getTelephone());
     }
 
+    @OnClick(R.id.tv_detail_locate)
+    void locate() {
+        Intent intent = new Intent(this, FindActivity.class);
+        intent.putExtra("business", businesses);
+        intent.putExtra("from", "detail");
+        startActivity(intent);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -130,10 +146,7 @@ public class DetailActivity extends Activity {
 
     private void refresh() {
         datas = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            datas.add("dasf");
-        }
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, datas);
+        adapter = new CommentAdapter(this, datas);
         listview.setAdapter(adapter);
         scrollView.smoothScrollTo(0, 10);
 
@@ -178,8 +191,16 @@ public class DetailActivity extends Activity {
                     comments.add(comment);
                 }
                 Log.i("TAG", "Comments内容: " + comments);
+                adapter.addAll(comments, true);
             }
         });
+
+    /*    HttpUtil.getCommentByVolley(businesses.getReview_list_url(), new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                Log.i("TAG", "Comments内容: " + s);
+            }
+        });*/
 
 
     }
@@ -187,6 +208,8 @@ public class DetailActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        getWindow().setExitTransition(new Slide().setDuration(1500).setInterpolator(new AccelerateInterpolator()));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Slide().setDuration(1500).setInterpolator(new AccelerateInterpolator()));
+        }
     }
 }

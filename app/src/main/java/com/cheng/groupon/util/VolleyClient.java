@@ -106,4 +106,11 @@ public class VolleyClient {
         ImageLoader.ImageListener listener = ImageLoader.getImageListener(iv, R.drawable.bucket_no_picture, R.drawable.bucket_no_picture);
         imageLoader.get(url, listener);
     }
+
+    public void getComment(String url, Response.Listener<String> listener) {
+
+        StringRequest request = new StringRequest(url, listener, null);
+        
+        queue.add(request);
+    }
 }

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.android.volley.Response;
 import com.cheng.groupon.C;
 import com.cheng.groupon.R;
 import com.cheng.groupon.app.MyApp;
@@ -272,6 +273,10 @@ public class HttpUtil {
 
     public interface OnResponseListener<T> {
         void onResponse(T t);
+    }
+
+    public static void getCommentByVolley(String url, Response.Listener<String> listener) {
+        VolleyClient.getInstance().getComment(url, listener);
     }
 
 }

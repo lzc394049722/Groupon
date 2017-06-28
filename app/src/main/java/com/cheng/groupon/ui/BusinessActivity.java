@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.drawable.AnimationDrawable;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
@@ -76,7 +77,10 @@ public class BusinessActivity extends Activity {
         setContentView(R.layout.activity_business);
         ButterKnife.bind(this);
         city = getIntent().getStringExtra("city");
-        getWindow().setEnterTransition(new Explode().setDuration(1000));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setEnterTransition(new Explode().setDuration(1000));
+        }
         initView();
     }
 
@@ -106,15 +110,19 @@ public class BusinessActivity extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int i = 0;
-                if(spUtils.isCloseBanner()){
-                    i = position-1;
-                }else {
-                    i = position-2;//有头部，加上refresh，一共两个
+                if (spUtils.isCloseBanner()) {
+                    i = position - 1;
+                } else {
+                    i = position - 2;//有头部，加上refresh，一共两个
                 }
                 Businesses item = adapter.getItem(i);
                 Intent intent = new Intent(BusinessActivity.this, DetailActivity.class);
-                intent.putExtra("business",item);
-                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(BusinessActivity.this).toBundle());
+                intent.putExtra("business", item);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(BusinessActivity.this).toBundle());
+                } else {
+                    startActivity(intent);
+                }
             }
         });
         AnimationDrawable d = (AnimationDrawable) ivLoading.getDrawable();
@@ -227,7 +235,9 @@ public class BusinessActivity extends Activity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        getWindow().setExitTransition(new Explode().setDuration(1000));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setExitTransition(new Explode().setDuration(1000));
+        }
     }
 
     @OnClick(R.id.tv_business_textview1)

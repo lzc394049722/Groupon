@@ -5,7 +5,9 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Handler;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
@@ -13,6 +15,7 @@ import android.text.TextUtils;
 import android.transition.Explode;
 import android.transition.Slide;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -91,20 +94,22 @@ public class MainActivity extends Activity {
     }
 
     private void initRadioButton() {
-        Drawable background = getResources().getDrawable(R.drawable.selector_footer1);
-        background.setBounds(0, 0, 50, 50);
+
+        Drawable background = ResourcesCompat.getDrawable(getResources(), R.drawable.selector_footer1, null);
+        int size = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics());
+        background.setBounds(0, 0, size, size);
         rb_01.setCompoundDrawables(null, background, null, null);
 
-        Drawable dra2 = getResources().getDrawable(R.drawable.selector_footer2);
-        dra2.setBounds(0, 0, 50, 50);
+        Drawable dra2 = ResourcesCompat.getDrawable(getResources(), R.drawable.selector_footer2, null);
+        dra2.setBounds(0, 0, size, size);
         rb_02.setCompoundDrawables(null, dra2, null, null);
 
-        Drawable dra3 = getResources().getDrawable(R.drawable.selector_footer3);
-        dra3.setBounds(0, 0, 50, 50);
+        Drawable dra3 = ResourcesCompat.getDrawable(getResources(), R.drawable.selector_footer3, null);
+        dra3.setBounds(0, 0, size, size);
         rb_03.setCompoundDrawables(null, dra3, null, null);
 
-        Drawable dra4 = getResources().getDrawable(R.drawable.selector_footer4);
-        dra4.setBounds(0, 0, 50, 50);
+        Drawable dra4 = ResourcesCompat.getDrawable(getResources(), R.drawable.selector_footer4, null);
+        dra4.setBounds(0, 0, size, size);
         rb_04.setCompoundDrawables(null, dra4, null, null);
 
     }
@@ -149,11 +154,14 @@ public class MainActivity extends Activity {
                     ivAdd.setVisibility(View.VISIBLE);
                 } else {
                     if (ivAdd.getVisibility() != View.GONE) {
-                        Animator animator = ViewAnimationUtils.createCircularReveal(layoutSearch, layoutSearch.getWidth() / 2,
-                                layoutSearch.getHeight() / 2, 0, (float) Math.hypot(layoutSearch.getWidth(), layoutSearch.getHeight()));
-                        animator.setDuration(200L);
-                        animator.setInterpolator(new AccelerateInterpolator());
-                        animator.start();
+                        Animator animator = null;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+                            animator = ViewAnimationUtils.createCircularReveal(layoutSearch, layoutSearch.getWidth() / 2,
+                                    layoutSearch.getHeight() / 2, 0, (float) Math.hypot(layoutSearch.getWidth(), layoutSearch.getHeight()));
+                            animator.setDuration(200L);
+                            animator.setInterpolator(new AccelerateInterpolator());
+                            animator.start();
+                        }
                         cityContainer.setVisibility(View.GONE);
                         ivAdd.setVisibility(View.GONE);
                     }
@@ -191,7 +199,11 @@ public class MainActivity extends Activity {
                         public void onClick(View v) {
                             Intent intent = new Intent(MainActivity.this, BusinessActivity.class);
                             intent.putExtra("city", tvCity.getText().toString());
-                            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(MainActivity.this).toBundle());
+                            } else {
+                                startActivity(intent);
+                            }
                         }
                     });
                 }
@@ -244,6 +256,13 @@ public class MainActivity extends Activity {
     protected void onResume() {
         super.onResume();
         refresh();
+    }
+
+    @OnClick(R.id.rb_03)
+    void find() {
+        Intent intent = new Intent(this, FindActivity.class);
+        intent.putExtra("from", "main");
+        startActivity(intent);
     }
 
     private void refresh() {

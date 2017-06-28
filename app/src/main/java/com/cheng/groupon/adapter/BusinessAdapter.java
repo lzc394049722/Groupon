@@ -8,7 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.utils.DistanceUtil;
 import com.cheng.groupon.R;
+import com.cheng.groupon.app.MyApp;
 import com.cheng.groupon.domain.Business.Businesses;
 import com.cheng.groupon.util.HttpUtil;
 
@@ -87,6 +90,16 @@ public class BusinessAdapter extends MyBaseAdapter<Businesses> {
 
         vh.tvInfo.setText(sb.toString());
 
+        if (MyApp.myLocate != null) {
+            double distance = DistanceUtil.getDistance(new LatLng(item.getLatitude(), item.getLongitude()), MyApp.myLocate);
+            if (distance < 1000) {
+                vh.tvDistance.setText((int) distance + "米");
+            } else if (distance > 1000) {
+                vh.tvDistance.setText(((int) distance / 1000) + "公里以上");
+            }
+        } else {
+            vh.tvDistance.setText("");
+        }
 
         return view;
     }
